@@ -35,7 +35,7 @@ few monitors setups.
 ## Pre-installation
 
 - Clone the repository 
-- Clone my scripts repository and move it to `~/.local share scritps`
+- Clone my scripts repository(https://github.com/NerdyKimmy/Scripts) and move it to `~/.local/share/scritps`
 - Add `export PATH="${HOME}/.local/bin:${PATH}"` to your `~/.bashrc` 
 - Edit `dwm/config.h` to change term, fonts, window rules, keybinds, paths etc.
 - move dwm dir to ~ and name it `dwm`
