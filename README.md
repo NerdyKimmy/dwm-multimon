@@ -16,11 +16,11 @@ few monitors setups.
 
 
 #### Dependencies:
-playerctl
-any compositor (I prefer fastcompmgr)
-pywal
-feh
-dunst
+- playerctl
+- any compositor (I prefer fastcompmgr)
+- pywal
+- feh
+- dunst
 
 #### Look:
 ![look](/look.png)
