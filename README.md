@@ -23,7 +23,7 @@ few monitors setups.
 - dunst
 
 #### Look:
-![look](/look.png)
+![looknew](/looknew.png)
 
 - Floating windows work pretty as in other wms like bspwm hyprland i3wm etc
 
