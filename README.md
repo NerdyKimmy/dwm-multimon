@@ -48,7 +48,14 @@ Do NOT execute make as root
 
 Then add this to your `.xinitrc` or create a new session
 ```
-exec startdwm
+dbus-run-session sh -c '
+while true; do
+    "$HOME"/dwm/bar.sh &
+    BAR_PID=$!
+    dwm > "$HOME"/.dwm.log 2>&1
+    kill $BAR_PID 2>/dev/null
+done
+'
 ```
 
 ## Post-installation
