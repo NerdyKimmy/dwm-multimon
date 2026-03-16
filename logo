@@ -1,0 +1,28 @@
+#!/bin/dash
+
+get_xcolor() {
+    res=$(xrdb -query | grep -i "$1:" | awk '{print $2}' | head -n 1)
+    if [ -n "$res" ]; then
+        printf "$2"
+    else
+        printf "$2"
+    fi
+}
+
+B=$(get_xcolor "color12" "\033[1;34m")
+W=$(get_xcolor "color15" "\033[1;37m")
+R=$(get_xcolor "color9"  "\033[1;31m")
+X="\033[0m"
+
+printf "\n"
+
+printf "${B}  ####  ${W} ###                 ###                       \n"
+printf "${B} ##  ## ${W}  ##                  ##                       \n"
+printf "${B} ##     ${W}  ##    ####    ####  ##  ### ###        ### ####   ### ###   ####    \n"
+printf "${B}  ###   ${W}  ##      ##  ##      ## ##    ##   ##   ##     ##   ###  ## ##  ##\n"
+printf "${B}    ##  ${W}  ##    ##### ##      ####      ## #### ##   #####   ##      ######\n"
+printf "${B} ##  ## ${W}  ##  ##  ##  ##      ## ##      ###  ###   ##  ##   ##      ##    \n"
+printf "${B}|  #### ${W} ####  ######  ####  ###  ###    ##    ##    ######  ##       #####\n"
+printf "${B}\`------------------------------------------------------------- l ${R}i${B} n u x ${X}\n"
+printf "${W}                        ${X}$(uname -sr)   $(hostname)\n"
+printf "\n"

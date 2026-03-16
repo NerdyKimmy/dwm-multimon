@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mkdir -p "$HOME/.local/bin"
+
 SCRIPTS_DIR="$HOME/.local/share/scripts"
 
 if [ ! -d "$SCRIPTS_DIR" ]; then
@@ -22,6 +24,15 @@ for rc in .bashrc .zshrc .mkshrc .yashrc .profile .bash_profile .kshrc; do
         else
             printf "PATH already exists in %s.\n" "$TARGET"
         fi
+    fi
+done
+
+for file in walpaper logo; do
+    if [ -f "$file" ]; then
+        printf "Moving %s to ~/.local/bin...\n" "$file"
+        mv "$file" "$HOME/.local/bin/"
+    else
+        printf "Warning: File '%s' not found in current directory.\n" "$file"
     fi
 done
 

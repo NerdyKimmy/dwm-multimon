@@ -1,0 +1,20 @@
+#!/bin/dash
+
+PAPER_COLOR="#f5efe1"
+
+wal -l -i "$1"
+
+TARGET_COLOR=$(head -n 1 "$HOME/.cache/wal/colors")
+
+find "$HOME/.cache/wal/" -type f -exec sed -i "s/$TARGET_COLOR/$PAPER_COLOR/gI" {} +
+
+
+wal -l -i "$1"
+
+TARGET_COLOR=$(head -n 1 "$HOME/.cache/wal/colors")
+
+find "$HOME/.cache/wal/" -type f -exec sed -i "s/$TARGET_COLOR/$PAPER_COLOR/gI" {} +
+
+xrdb -merge "$HOME/.cache/wal/colors.Xresources"
+
+echo "System paperized! ✿"
