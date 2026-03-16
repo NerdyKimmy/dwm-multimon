@@ -17,6 +17,7 @@ few monitors setups.
 
 #### Dependencies:
 - playerctl
+- dash (for bar script)
 - any compositor
 - pywal
 - maim
@@ -71,5 +72,7 @@ chmod +x install.sh
 ```
 ## Post-installation
 - Change bar output in `~/dwm/bar.sh`.
-- Enjoy!
-
+#### Optionally
+- Use logo to get logo as on Screenshot
+- Use `walpaper`, my wal script, to get a light theme with an old yellowish book paper atmosphere `walpaper /path/to/your/image`
+## Enjoy!
