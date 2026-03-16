@@ -39,7 +39,7 @@ done
 
 printf "Moving dwm, dmenu directory to %s/dwm...\n" "$HOME"
 cp * "$HOME/dwm"
-cp -r dmenu "$HOME/dwm"
+cp -r dmenu "$HOME/dwm" && rm -rf dmenu
 cd "$HOME/dwm" || exit 1
 cp -r dmenu "$HOME/"
 
