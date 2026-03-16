@@ -64,10 +64,11 @@ done
 ```
 ## Scripted
 - Clone repository
-- cd dwm-multimon
-- chmod +x install.sh
-- ./install.sh
-
+```
+cd dwm-multimon
+chmod +x install.sh
+./install.sh
+```
 ## Post-installation
 - Change bar output in `~/dwm/bar.sh`.
 - Enjoy!
