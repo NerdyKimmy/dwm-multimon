@@ -2,12 +2,12 @@
 
 mkdir -p "$HOME/.local/bin"
 
-SCRIPTS_DIR="$HOME/.local/share/scripts"
+SCRIPTS_DIR="$HOME/.local/share/"
 
 if [ ! -d "$SCRIPTS_DIR" ]; then
     printf "Cloning scripts repository...\n"
     mkdir -p "$HOME/.local/share"
-    git clone https://github.com/NerdyKimmy/Scripts "$SCRIPTS_DIR"
+    git clone https://github.com/NerdyKimmy/scripts "$SCRIPTS_DIR"
 else
     printf "Scripts directory already exists. Skipping clone.\n"
 fi
