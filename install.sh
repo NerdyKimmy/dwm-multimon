@@ -36,14 +36,9 @@ for file in walpaper logo; do
     fi
 done
 
-if [ -d "dwm" ]; then
-    printf "Moving dwm directory to %s/dwm...\n" "$HOME"
-    cp * "$HOME/dwm"
-    printf "Note: Please edit %s/dwm/config.h for your settings before building.\n" "$HOME"
-else
-    printf "Error: 'dwm' directory not found in the current folder.\n"
-    exit 1
-fi
+printf "Moving dwm directory to %s/dwm...\n" "$HOME"
+cp * "$HOME/dwm"
+printf "Note: Please edit %s/dwm/config.h for your settings before building.\n" "$HOME"
 
 # --- Installation ---
 
