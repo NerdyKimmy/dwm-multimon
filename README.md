@@ -17,8 +17,10 @@ few monitors setups.
 
 #### Dependencies:
 - playerctl
-- any compositor (I prefer fastcompmgr)
+- any compositor
 - pywal
+- maim
+- elogind
 - feh
 - dunst
 
@@ -31,15 +33,18 @@ few monitors setups.
 
 - [JetBrains Mono Nerd Font](https://www.nerdfonts.com/font-downloads)
 - DejaVu Sans for flower :3 ✿
+- Noto Emojies
 
-## Pre-installation
+## Manual install
+#### Pre-installation
 
 - Clone the repository 
 - Clone my scripts repository(https://github.com/NerdyKimmy/Scripts) and move it to `~/.local/share/scritps`
 - Add `export PATH="${HOME}/.local/bin:${PATH}"` to your `~/.bashrc` 
 - Edit `dwm/config.h` to change term, fonts, window rules, keybinds, paths etc.
 - move dwm dir to ~ and name it `dwm`
-## Installation
+- move `walpaper` and `logo` to `~/.local/bin`
+#### Installation
 ```
 cd ~/dwm
 make install
@@ -57,6 +62,11 @@ while true; do
 done
 '
 ```
+## Scripted
+- Clone repository
+- cd dwm-multimon
+- chmod +x install.sh
+- ./install.sh
 
 ## Post-installation
 - Change bar output in `~/dwm/bar.sh`.
