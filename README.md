@@ -21,10 +21,11 @@ few monitors setups.
 - any compositor
 - pywal
 - maim
-- dmenu
 - elogind
 - feh
 - dunst
+
+**My dmenu build included**
 
 #### Look:
 ![looknew](/looknew.png)
