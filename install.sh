@@ -14,7 +14,7 @@ fi
 
 PATH_LINE='export PATH="${HOME}/.local/bin:${PATH}"'
 
-for rc in .bashrc .zshrc .mkshrc .yashrc .profile .bash_profile .kshrc; do
+for rc in .bashrc .zshrc .mkshrc .yashrc .profile .bash_profile .mkshrc; do
     TARGET="$HOME/$rc"
     if [ -f "$TARGET" ]; then
         # Check if the line already exists to avoid duplicates
@@ -38,7 +38,7 @@ done
 
 if [ -d "dwm" ]; then
     printf "Moving dwm directory to %s/dwm...\n" "$HOME"
-    cp -r dwm "$HOME/dwm"
+    cp * "$HOME/dwm"
     printf "Note: Please edit %s/dwm/config.h for your settings before building.\n" "$HOME"
 else
     printf "Error: 'dwm' directory not found in the current folder.\n"
@@ -75,4 +75,4 @@ done
 EOF
 
 printf "Installation complete!\n"
-printf "Post-installation: Change bar output in ~/dwm/bar.sh and enjoy!\n"
+printf "Post-installation: Change config.h and bar output in ~/dwm/bar.sh and enjoy!\n"
