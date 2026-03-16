@@ -8,6 +8,7 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[] = {
     "JetBrainsMono Nerd Font:size=12",
     "DejaVu Sans:size=14",     // Secondary/Fallback font
+    "Noto Emoji:size=14",     // Secondary/Fallback font
 };
 static const char dmenufont[]       = "monospace:size=10";
 /* tagging */
@@ -23,6 +24,8 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "firefox",  NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "discord",  NULL,       NULL,       1 << 0,       0,           -1 },
+	{ "waterfox",  NULL,       NULL,      1 << 4,       0,           -1 },
 	{ "Telegram", NULL,       NULL,       1 << 5,        1,           -1 },
 	{ "krita",    NULL,       NULL,       1 <<  4,        1,           -1 },
 	{ "mpv",      NULL,       NULL,       0,             1,           -1 },
@@ -42,9 +45,9 @@ static const int refreshrate = 120;  /* refresh rate (per second) for client mov
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "",      tile },    /* first entry is default */
-	{ "󱂬",      NULL },    /* no layout function means floating behavior */
-	{ "",      monocle },
+	{ " 📚 ",      tile },    /* first entry is default */
+	{ " 󰸖 ",      NULL },    /* no layout function means floating behavior */
+	{ " 📕 ",      monocle },
 };
 
 /* key definitions */
@@ -61,9 +64,9 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 // apps
-static const char *termcmd[]     = { "st", NULL };
+static const char *termcmd[]     = { "xterm", NULL };
 static const char *firefox[]     = { "firefox", NULL };
-static const char *thunar[]      = { "thunar", NULL };
+static const char *nemo[]      = { "nemo", NULL };
 // scripts
 static const char *dmenucmd[]    = {"/home/aliisa/.local/share/scripts/dmenu.sh", NULL };
 static const char *player[]      = { "/home/aliisa/.local/share/scripts/player.sh", NULL };
@@ -90,7 +93,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_p,      spawn,          {.v = player} },
 	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = prev } },
 	{ MODKEY|ShiftMask,             XK_n,      spawn,          {.v = next } },
-	{ MODKEY,                       XK_f,      spawn,          {.v = thunar} },
+	{ MODKEY,                       XK_f,      spawn,          {.v = nemo} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -112,6 +115,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+    { 0,                       XK_F11,      togglebar,      {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)

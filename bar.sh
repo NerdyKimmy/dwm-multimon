@@ -78,5 +78,5 @@ while read -r line <&3; do
         BAT*) battery="${line#???}" ;;
         KEY*) key="${line#???}" ;;
     esac
-    xsetroot -name "| $key | $volume | $battery | $date "
+    xsetroot -name "|  $key  |  $volume  |  $battery  |  $date  "
 done
