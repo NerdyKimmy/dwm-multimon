@@ -37,18 +37,18 @@ for file in walpaper logo; do
     fi
 done
 
-printf "Moving dwm directory to %s/dwm...\n" "$HOME"
+printf "Moving dwm, dmenu directory to %s/dwm...\n" "$HOME"
 cp * "$HOME/dwm"
-printf "Note: Please edit %s/dwm/config.h for your settings before building.\n" "$HOME"
-
-# --- Installation ---
-
-printf "Building and installing dwm...\n"
+cp -r dmenu "$HOME/dwm"
 cd "$HOME/dwm" || exit 1
+cp -r dmenu "$HOME/"
 
 make
 make install
 
+cd "$HOME/dmenu" || exit 1
+make
+make install
 
 XINITRC="$HOME/.xinitrc"
 printf "Configuring %s...\n" "$XINITRC"
