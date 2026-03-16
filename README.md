@@ -21,6 +21,7 @@ few monitors setups.
 - any compositor
 - pywal
 - maim
+- dmenu
 - elogind
 - feh
 - dunst

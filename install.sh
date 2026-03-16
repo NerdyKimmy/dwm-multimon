@@ -1,6 +1,7 @@
 #!/bin/sh
 
 mkdir -p "$HOME/.local/bin"
+mkdir -p "$HOME/dwm"
 
 SCRIPTS_DIR="$HOME/.local/share/"
 
