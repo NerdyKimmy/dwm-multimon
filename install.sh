@@ -3,9 +3,9 @@
 mkdir -p "$HOME/.local/bin"
 mkdir -p "$HOME/dwm"
 
-SCRIPTS_DIR="$HOME/.local/share/"
+SCRIPTS_DIR="$HOME/.local/share/scripts"
 
-if [ ! -d "$SCRIPTS_DIR" ]; then
+if [ ! -d "SCRIPTS_DIR" ]; then
     printf "Cloning scripts repository...\n"
     mkdir -p "$HOME/.local/share"
     git clone https://github.com/NerdyKimmy/scripts "$SCRIPTS_DIR"

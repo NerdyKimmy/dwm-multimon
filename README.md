@@ -24,8 +24,12 @@ few monitors setups.
 - elogind
 - feh
 - dunst
+- fonts
 
-**My dmenu build included**
+##### Also included:
+- dmenu (my build)
+- logo (script for **Slackware** logo in terminal)
+- walpaper (script for such light colorscheme with yellowish bg color isntead of white for old library atmosphere)
 
 #### Look:
 ![looknew](/looknew.png)
