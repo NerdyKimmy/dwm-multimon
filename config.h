@@ -6,7 +6,7 @@ static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[] = {
-    "JetBrainsMono Nerd Font:size=12",
+    "JetBrainsMono Nerd Font:size=14",
     "DejaVu Sans:size=14",     // Secondary/Fallback font
     "Noto Emoji:size=14",     // Secondary/Fallback font
 };
@@ -14,23 +14,28 @@ static const char dmenufont[]       = "monospace:size=10";
 /* tagging */
 #include <X11/XF86keysym.h>
 #include "/home/aliisa/.cache/wal/colors-wal-dwm.h"
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8"};
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "firefox",  NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "discord",  NULL,       NULL,       1 << 0,       0,           -1 },
-	{ "waterfox",  NULL,       NULL,      1 << 4,       0,           -1 },
-	{ "Telegram", NULL,       NULL,       1 << 5,        1,           -1 },
-	{ "krita",    NULL,       NULL,       1 <<  4,        1,           -1 },
-	{ "mpv",      NULL,       NULL,       0,             1,           -1 },
-	{ "imv",      NULL,       NULL,       0,             1,           -1 },
-	{ "emacs",    NULL,       NULL,       0,             1,           -1 },
+	/* class             instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",              NULL,       NULL,       0,             1,           -1 },
+	{ "firefox",           NULL,       NULL,       1 << 1,        0,           -1 },
+	{ "discord",           NULL,       NULL,       1 << 0,        0,           -1 },
+	{ "waterfox",          NULL,       NULL,       1 << 4,        0,           -1 },
+	{ "Telegram",          NULL,       NULL,       1 << 5,        1,           -1 },
+	{ "krita",             NULL,       NULL,       1 << 4,        1,           -1 },
+	{ "imv",               NULL,       NULL,       0,             1,           -1 },
+	{ "emacs",             NULL,       NULL,       1 << 3,        0,           -1 },
+	{ "launcher",          NULL,       NULL,       1 << 2,        1,           -1 },
+	{ "pmaxemu",           NULL,       NULL,       1 << 2,        1,           -1 },
+	{ "neoemu",            NULL,       NULL,       1 << 2,        1,           -1 },
+	{ "teams-for-linux",   NULL,       NULL,       1 << 2,        0,           -1 },
+	{ "mattermost",        NULL,       NULL,       1 << 2,        0,           -1 },
+
 };
 
 /* layout(s) */
@@ -46,7 +51,7 @@ static const int refreshrate = 120;  /* refresh rate (per second) for client mov
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ " 📚 ",      tile },    /* first entry is default */
-	{ " 󰸖 ",      NULL },    /* no layout function means floating behavior */
+	{ " 󰸖  ",      NULL },    /* no layout function means floating behavior */
 	{ " 📕 ",      monocle },
 };
 
@@ -79,9 +84,9 @@ static const char *powermenu[]   = { "/home/aliisa/.local/share/scripts/powermen
 static const char *lock[]        = { "/home/aliisa/.local/share/scripts/lockf.sh", NULL };
 static const char *lastscr[]     = { "/home/aliisa/.local/share/scripts/lastscreen.sh", NULL };
 //audio
-static const char *upvol[]       = { "/usr/bin/pactl", "set-sink-volume", "@DEFAULT_SINK@", "+4%",     NULL };
-static const char *downvol[]     = { "/usr/bin/pactl", "set-sink-volume", "@DEFAULT_SINK@", "-4%",     NULL };
-static const char *mutevol[]     = { "/usr/bin/pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
+static const char *upvol[]       = { "amixer", "set", "Master", "4%+", "unmute",     NULL };
+static const char *downvol[]     = { "amixer", "set", "Master", "4%-", "unmute",     NULL };
+static const char *mutevol[]     = { "amixer", "set",  "Master", "toggle", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -109,7 +114,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY,             XK_s,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+	{ MODKEY|Mod1Mask,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
@@ -125,11 +130,17 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
+	TAGKEYS(                        XK_0,                      9)
 	{ 0,                            XF86XK_AudioRaiseVolume,     spawn,          {.v = upvol   } },
 	{ 0,                            XF86XK_AudioLowerVolume,     spawn,          {.v = downvol } },
 	{ 0,                            XF86XK_AudioMute,            spawn,          {.v = mutevol } },
-	{ 0,                            XK_Print,  spawn,          {.v = screenshot} },
-	{ ShiftMask,                    XK_Print,  spawn,          {.v = screenshotf} },
+    { MODKEY,           XK_Left,  spawn, SHCMD("mocp --seek -10") },
+    { MODKEY,           XK_Right, spawn, SHCMD("mocp --seek +10") },
+    { MODKEY,           XK_o, spawn, SHCMD("mocp --stop") },
+    { MODKEY,           XK_Up,    spawn, SHCMD("mocp --toggle repeat") },
+    { MODKEY,           XK_Down,  spawn, SHCMD("mocp --toggle shuffle") },
+	{ 0,                            XK_Hiragana_Katakana,  spawn,          {.v = screenshot} },
+	{ ShiftMask,                    XK_Hiragana_Katakana,  spawn,          {.v = screenshotf} },
 	{ MODKEY|Mod1Mask,              XK_r,      spawn,          {.v = rewal} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };

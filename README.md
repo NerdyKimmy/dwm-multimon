@@ -1,65 +1,63 @@
-# My DWM setup
+# DWM MultiMon
 
 [DWM](https://dwm.suckless.org/) is a dynamic window manager made by the
-[Suckless team](). This is my own configuration of this window manager for
-few monitors setups.
+[Suckless team](https://suckless.org/). This is my own configuration of this window manager for
+multiple monitor setups.
 **Warning: this setup is NOT "just works". You may need to edit some scripts and configs.**
 
-#### Applied patches:
-- [single tagset](https://dwm.suckless.org/patches/single_tagset/)
-- [alwayscenter](https://dwm.suckless.org/patches/alwayscenter/)
-- [fadeinactive](https://dwm.suckless.org/patches/fadeinactive/)
-- [statusbar on all monitors](https://dwm.suckless.org/patches/statusallmons/)
-- my patch for showing playerctl in bar (requires playerctl)
-- my patch for normal working floating windows with singletagset 
-
-
+#### Changes compared to vanilla:
+- Floating windows are spawned in the center and can be moved like in BSPWM through all monitors
+- Single tags for multiple monitors, now monitor's clients are not a separate list for each
+- Live tag swap functional with moving both floating and tiled X clients
+- Built-in inactive windows fade, can be used with any compositor
+- Bar is presented on all screens (Script with bar setup is built-in)
+- Music on bar instead of current focused window, can be used with moc and with playerctl (bar.sh and dbusbar.sh scripts)
+- Fixed bugs with transparent window's border
 
 #### Dependencies:
-- playerctl
+- playerctl (only for dbus script version)
 - dash (for bar script)
-- any compositor
+- any compositor (optional)
 - pywal
 - maim
-- elogind
+- elogind (only for playerctl)
 - feh
-- dunst
-- fonts
+- herbe (can be replaced with dunst, if you prefer to use dbus)
 
 ##### Also included:
 - dmenu (my build)
-- logo (script for **Slackware** logo in terminal)
-- walpaper (script for such light colorscheme with yellowish bg color isntead of white for old library atmosphere)
+- wallpaper (script for such a light colorscheme with yellowish bg color instead of white for an old library atmosphere)
 
 #### Look:
 ![looknew](/looknew.png)
 
-- Floating windows work pretty as in other wms like bspwm hyprland i3wm etc
+- Floating windows work pretty much as in other wms 
 
 #### Used fonts:
 
 - [JetBrains Mono Nerd Font](https://www.nerdfonts.com/font-downloads)
-- DejaVu Sans for flower :3 ✿
-- Noto Emojies
+- DejaVu Sans for flower ✿
+- Noto Emojis
 
 ## Manual install
 #### Pre-installation
 
 - Clone the repository 
-- Clone my scripts repository(https://github.com/NerdyKimmy/scripts) and move it to `~/.local/share/scritps`
+- Clone my scripts repository (https://github.com/NerdyKimmy/scripts) and move it to `~/.local/share/scripts`
 - Add `export PATH="${HOME}/.local/bin:${PATH}"` to your `~/.bashrc` 
 - Edit `dwm/config.h` to change term, fonts, window rules, keybinds, paths etc.
-- move dwm dir to ~ and name it `dwm`
-- move `walpaper` and `logo` to `~/.local/bin`
+- Move dwm dir to `~` and name it `dwm`
+- Move `wallpaper` and `logo` to `~/.local/bin`
+
 #### Installation
-```
+```bash
 cd ~/dwm
 make install
 ```
-Do NOT execute make as root
+*Note: Do NOT execute make as root if your `config.mk` is set up to install in a local user directory.*
 
-Then add this to your `.xinitrc` or create a new session
-```
+Then add this to your `.xinitrc` (or `.desktop` file if using a display manager) or create a new session:
+```bash
 dbus-run-session sh -c '
 while true; do
     "$HOME"/dwm/bar.sh &
@@ -69,17 +67,24 @@ while true; do
 done
 '
 ```
+*(Remove `dbus-run-session` from the snippet if you prefer not to use it).*
+
 ## Scripted
 - Clone repository
-```
+```bash
 cd dwm-multimon
 chmod +x install.sh
-./install.sh
 ```
--Edit `config.h` and do make install to change term, fonts, window rules, keybinds, paths etc.
+- Edit `config.h` to change term, fonts, window rules, keybinds, paths etc., then install:
+```bash
+./install.sh
+make install
+```
+
 ## Post-installation
 - Change bar output in `~/dwm/bar.sh`.
+
 #### Optionally
-- Use logo to get logo as on Screenshot
-- Use `walpaper`, my wal script, to get a light theme with an old yellowish book paper atmosphere `walpaper /path/to/your/image`
+- Use `wallpaper`, my wal script, to get a light theme with an old yellowish book paper atmosphere: `wallpaper /path/to/your/image`
+
 ## Enjoy!

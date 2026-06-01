@@ -56,6 +56,7 @@
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
 
+
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel }; /* color schemes */
@@ -218,7 +219,7 @@ static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
-static void toggleopacity(const Arg *arg);
+//static void toggleopacity(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
@@ -251,10 +252,9 @@ void get_music_info(void) {
         if (fgets(music_text, sizeof(music_text), f) == NULL)
             strcpy(music_text, "✿");
         fclose(f);
-        /* Прибираємо символ нового рядка */
         music_text[strcspn(music_text, "\n")] = 0;
     } else {
-        strcpy(music_text, "OwOid");
+        strcpy(music_text, "Sisu");
     }
 }
 
@@ -355,18 +355,18 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 		if (*y + *h + 2 * c->bw < 0)
 			*y = 0;
         } else {
-		/* If floating, use the total combined resolution (3840x1080) */
+		/* If floating, use the total combined resolution (Works with different resolution monitors in my case 1920x1080 ana 1920x1200) */
 		if (c->isfloating) {
-			if (*x >= sw) /* sw is your total screen width (3840) */
+			if (*x >= sw)
 				*x = sw - WIDTH(c);
-			if (*y >= sh) /* sh is your total screen height (1080) */
+			if (*y >= sh)
 				*y = sh - HEIGHT(c);
 			if (*x + *w + 2 * c->bw <= 0)
 				*x = 0;
 			if (*y + *h + 2 * c->bw <= 0)
 				*y = 0;
 		} else {
-			/* Tiled windows still stay inside their specific monitor (1920x1080) */
+			/* Tiled windows still stay inside their specific monitor */
 			if (*x >= m->wx + m->ww)
 				*x = m->wx + m->ww - WIDTH(c);
 			if (*y >= m->wy + m->wh)
@@ -804,7 +804,7 @@ drawbar(Monitor *m)
 		return;
 
 	/* draw status first so it can be overdrawn by tags later */
-	if (m == selmon || 1) { /* status is only drawn on selected monitor */
+	if (m == selmon || 1) { /* status drawn on all monitors */
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
 		drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
@@ -832,17 +832,11 @@ drawbar(Monitor *m)
 	if ((w = m->ww - tw - x) > bh) {
 
 		drw_setscheme(drw, scheme[SchemeSel]);
+		get_music_info();
+   		drw_text(drw, x, 0, w, bh, lrpad / 2, music_text, 0);
 		if (m->sel) {
-			get_music_info(); // Оновлюємо текст перед малюванням
-   			drw_text(drw, x, 0, w, bh, lrpad / 2, music_text, 0);
     			if (m->sel->isfloating)
         			drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
-		}
-		 else {
-			drw_setscheme(drw, scheme[SchemeSel]);
-			get_music_info(); // Оновлюємо текст перед малюванням
-   			drw_text(drw, x, 0, w, bh, lrpad / 2, music_text, 0);
-			
 		}
 	}
 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
@@ -934,6 +928,8 @@ focusmon(const Arg *arg)
 	unfocus(selmon->sel, 0);
 	selmon = m;
 	focus(NULL);
+
+    XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->wx + selmon->ww / 2, selmon->wy + selmon->wh / 2);
 }
 
 void
@@ -1408,16 +1404,7 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
     
-    /* THE FIX: Use cl->clients and provide both arguments to nexttiled */
-	if (((nexttiled(cl->clients, c->mon) == c && !nexttiled(c->next, c->mon))
-		|| &monocle == c->mon->lt[c->mon->sellt]->arrange)
-		&& !c->isfloating && !c->mon->lt[c->mon->sellt]->arrange) {
-		c->w = wc.width += c->bw * 2;
-		c->h = wc.height += c->bw * 2;
-		wc.border_width = 0;
-	} else {
-		wc.border_width = c->bw;
-	}
+	wc.border_width = c->bw;
     
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);
@@ -1532,7 +1519,7 @@ scan(void)
 			if (wa.map_state == IsViewable || getstate(wins[i]) == IconicState)
 				manage(wins[i], &wa);
 		}
-		for (i = 0; i < num; i++) { /* now the transients */
+		for (i = 0; i < num; i++) { 
 			if (!XGetWindowAttributes(dpy, wins[i], &wa))
 				continue;
 			if (XGetTransientForHint(dpy, wins[i], &d1)
@@ -1818,7 +1805,6 @@ tag(const Arg *arg)
 		for (m = mons; m; m = m->next)
 			/* if tag is visible on another monitor, move client to the new monitor */
 			if (m != selmon && m->tagset[m->seltags] & newtags) {
-				/* prevent moving client to all tags (MODKEY-Shift-0) when multiple monitors are connected */
 				if(newtags & selmon->tagset[selmon->seltags])
 					return;
 				selmon->sel->tags = newtags;
@@ -1884,7 +1870,7 @@ togglefloating(const Arg *arg)
 {
 	if (!selmon->sel)
 		return;
-	if (selmon->sel->isfullscreen) /* no support for fullscreen windows */
+	if (selmon->sel->isfullscreen)
 		return;
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
 	if (selmon->sel->isfloating)
@@ -1892,17 +1878,17 @@ togglefloating(const Arg *arg)
 			selmon->sel->w, selmon->sel->h, 0);
 	arrange(selmon);
 }
-
+/*
 void
 toggleopacity(const Arg *arg) {
     Client *c;
     bUseOpacity = !bUseOpacity;
 
-    /* Use the arrow operator (->) because cl is a pointer in singletagset */
     for (c = cl->clients; c; c = c->next) {
         opacity(c, (bUseOpacity && c != selmon->sel) ? inactiveopacity : activeopacity);
     }
 }
+*/
 
 
 void
@@ -1976,7 +1962,7 @@ unmanage(Client *c, int destroyed)
 	detachstack(c);
 	if (!destroyed) {
 		wc.border_width = c->oldbw;
-		XGrabServer(dpy); /* avoid race conditions */
+		XGrabServer(dpy); 
 		XSetErrorHandler(xerrordummy);
 		XSelectInput(dpy, c->win, NoEventMask);
 		XConfigureWindow(dpy, c->win, CWBorderWidth, &wc); /* restore border */
@@ -2155,7 +2141,7 @@ updatesizehints(Client *c)
 	XSizeHints size;
 
 	if (!XGetWMNormalHints(dpy, c->win, &size, &msize))
-		/* size is uninitialized, ensure that size.flags aren't used */
+		/* size is uninitialized */
 		size.flags = PSize;
 	if (size.flags & PBaseSize) {
 		c->basew = size.base_width;
@@ -2207,7 +2193,7 @@ updatetitle(Client *c)
 {
 	if (!gettextprop(c->win, netatom[NetWMName], c->name, sizeof c->name))
 		gettextprop(c->win, XA_WM_NAME, c->name, sizeof c->name);
-	if (c->name[0] == '\0') /* hack to mark broken clients */
+	if (c->name[0] == '\0') /*  mark broken xclients */
 		strcpy(c->name, broken);
 }
 
@@ -2254,8 +2240,6 @@ view(const Arg *arg)
 		newtagset = arg->ui & TAGMASK;
 	for (m = mons; m; m = m->next)
 		if (m != selmon && newtagset & m->tagset[m->seltags]) {
-			/* prevent displaying all tags (MODKEY-0) when multiple monitors
-			 * are connected */
 			if (newtagset & selmon->tagset[selmon->seltags])
 				return;
 			m->sel = selmon->sel;
@@ -2269,22 +2253,29 @@ view(const Arg *arg)
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
         Client *c;
-    for (c = cl->clients; c; c = c->next) {
-        if (c->isfloating && (c->tags & selmon->tagset[selmon->seltags])) {
-            /* If the window is physically outside the current monitor's boundaries */
-            if (c->x < selmon->mx || c->x >= selmon->mx + selmon->mw) {
-                /* Find the 'other' monitor in your 2-monitor setup to calculate the jump */
-                Monitor *other = (selmon == mons) ? mons->next : mons;
 
-                /* Mathematically shift the X/Y based on monitor origins (e.g., +/- 1920) */
+    Monitor *other = (selmon == mons) ? mons->next : mons;
+    /* floating window swap */
+    for (c = cl->clients; c; c = c->next) {
+        if (!c->isfloating) continue;
+
+        if (c->tags & selmon->tagset[selmon->seltags]) {
+            if (c->x < selmon->mx || c->x >= selmon->mx + selmon->mw) {
                 c->x = c->x - other->mx + selmon->mx;
                 c->y = c->y - other->my + selmon->my;
-
-                /* Force the update with interact=1 to use your sw boundaries */
+                resize(c, c->x, c->y, c->w, c->h, 1);
+            }
+        }
+        else if (c->tags & other->tagset[other->seltags]) {
+            if (c->x < other->mx || c->x >= other->mx + other->mw) {
+                c->x = c->x - selmon->mx + other->mx;
+                c->y = c->y - selmon->my + other->my;
                 resize(c, c->x, c->y, c->w, c->h, 1);
             }
         }
     }
+
+
 	attachclients(selmon);
 	arrange(selmon);
 	focus(NULL);

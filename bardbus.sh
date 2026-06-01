@@ -14,19 +14,14 @@ pkill -f "playerctl status" 2>/dev/null
 
 
 (
-    format_key() {
-        case "$1" in
-            us) echo "En" ;;
-            ua) echo "Ua" ;;
-            *) echo "E" ;;
-        esac
-    }
-
-    init_key=$(xkb-switch -p 2>/dev/null)
-    echo "KEY$(format_key "$init_key")" >&3
-
-    xkb-switch -W 2>/dev/null | while read -r curr_key; do
-        echo "KEY$(format_key "$curr_key")" >&3
+    last_key=""
+    while :; do
+        curr_key=$(xset -q | awk '/LED/{print ($10=="00000000"?"En":"Ua")}')
+        if [ "$curr_key" != "$last_key" ]; then
+            echo "KEY$curr_key" >&3
+            last_key="$curr_key"
+        fi
+        sleep 0.1
     done
 ) &
 
@@ -61,18 +56,19 @@ pkill -f "playerctl status" 2>/dev/null
 ) &
 
 (
-    moc_info=$(mocp -i 2>/dev/null)
-    state=$(echo "$moc_info" | awk '/^State:/{print $2}')
-    
-    if [ "$state" = "PLAY" ]; then
-        playing=$(echo "$moc_info" | awk -F'/' '/^File:/{sub(/\.mp3$/, "", $NF); print $NF}')
+    echo "✿ Enjoying the Silence ✿" > /tmp/dwm_music
+    echo "MUS✿ Enjoying the Silence ✿" >&3
+
+    playerctl metadata --format '{{ artist }} {{ title }}' --follow 2>/dev/null | while read -r line; do
+        if [ -z "$line" ]; then
+            msg="✿ Enjoying the Silence ✿"
+        else
+            msg=$(echo "$line" | cut -c1-128)
+        fi
         
-        echo "$playing" > /tmp/dwm_music
-        echo "MUS$playing" >&3
-    else
-        echo "✿ Enjoying the Silence ✿" > /tmp/dwm_music
-        echo "MUS✿ Enjoying the Silence ✿" >&3
-    fi
+        echo "$msg" > /tmp/dwm_music
+        echo "MUS$msg" >&3
+    done
 ) &
 
 while read -r line <&3; do
