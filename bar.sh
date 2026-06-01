@@ -81,6 +81,7 @@ while read -r line <&3; do
         VOL*) volume="${line#???}" ;;
         BAT*) battery="${line#???}" ;;
         KEY*) key="${line#???}" ;;
+        MUS*) ;;
     esac
     xsetroot -name "|  $key  |  $volume  |  $battery  |  $date  "
 done
