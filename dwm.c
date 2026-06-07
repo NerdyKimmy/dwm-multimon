@@ -897,7 +897,16 @@ focus(Client *c)
 		grabbuttons(c, 1);
 		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
 		setfocus(c);
-		opacity(c, activeopacity);
+       	XClassHint ch;
+	if (XGetClassHint(dpy, c->win, &ch)) {
+		if (ch.res_class && strcmp(ch.res_class, "XTerm") == 0) {
+			opacity(c, 0.94);
+		} else {
+			opacity(c, activeopacity);
+		}
+		if (ch.res_class) XFree(ch.res_class);
+		if (ch.res_name) XFree(ch.res_name);
+	}
 	} else {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
@@ -1944,7 +1953,16 @@ unfocus(Client *c, int setfocus)
 	if (!c)
 		return;
 	grabbuttons(c, 0);
-	opacity(c, inactiveopacity);
+    XClassHint ch;
+	if (XGetClassHint(dpy, c->win, &ch)) {
+		if (ch.res_class && strcmp(ch.res_class, "XTerm") == 0) {
+			opacity(c, 0.88);
+		} else {
+			opacity(c,inactiveopacity); /* Keep other apps opaque when unfocused */
+		}
+		if (ch.res_class) XFree(ch.res_class);
+		if (ch.res_name) XFree(ch.res_name);
+	}
 	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
 	if (setfocus) {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
@@ -2256,6 +2274,7 @@ view(const Arg *arg)
 
     Monitor *other = (selmon == mons) ? mons->next : mons;
     /* floating window swap */
+    if (other){
     for (c = cl->clients; c; c = c->next) {
         if (!c->isfloating) continue;
 
@@ -2273,6 +2292,7 @@ view(const Arg *arg)
                 resize(c, c->x, c->y, c->w, c->h, 1);
             }
         }
+    }
     }
 
 
